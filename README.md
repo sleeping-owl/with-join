@@ -23,6 +23,11 @@
 	
 2. That`s all.
 
+### Todo
+
+- Nested relations support
+- Other relation types support
+
 ## Copyright and License
 
 Admin was written by Sleeping Owl for the Laravel framework and is released under the MIT License. See the LICENSE file for details.
