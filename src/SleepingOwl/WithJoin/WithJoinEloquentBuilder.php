@@ -19,7 +19,7 @@ class WithJoinEloquentBuilder extends Builder
 	{
 		foreach ($this->eagerLoad as $name => $constraints)
 		{
-			if ($this->isNestedRelation($name) || count($this->nestedRelations($name)) > 0)
+			if ($this->isNestedRelation($name))
 			{
 				continue;
 			}
@@ -27,7 +27,8 @@ class WithJoinEloquentBuilder extends Builder
 			if ($this->isReferencedInQuery($name) && $this->isRelationSupported($relation))
 			{
 				$this->disableEagerLoad($name);
-				$this->addJoinToQuery($name, $relation);
+				$this->addJoinToQuery($name, $this->model->getTable(), $relation);
+				$this->addNestedRelations($name, $relation);
 			}
 		}
 		$this->selectFromQuery($this->model->getTable(), '*');
@@ -45,16 +46,32 @@ class WithJoinEloquentBuilder extends Builder
 
 	/**
 	 * @param $name
+	 */
+	protected function addNestedRelations($name, BelongsTo $relation)
+	{
+		$nestedRelations = $this->nestedRelations($name);
+		if (count($nestedRelations) <= 0) return;
+
+		$class = $relation->getRelated();
+		foreach ($nestedRelations as $nestedName => $nestedConstraints)
+		{
+			$relation = $class->$nestedName();
+			$this->addJoinToQuery($nestedName, $class->getTable(), $relation, $name . '._foreign_');
+		}
+	}
+
+	/**
+	 * @param $name
 	 * @param BelongsTo $relation
 	 */
-	protected function addJoinToQuery($name, BelongsTo $relation)
+	protected function addJoinToQuery($name, $currentTable, BelongsTo $relation, $prefix = '')
 	{
 		$foreignTable = $relation->getRelated()->getTable();
 		$columns = $this->getColumns($foreignTable);
-		$this->query->leftJoin($foreignTable . ' as ' . $name, $name . '.' . $relation->getOtherKey(), '=', $relation->getForeignKey());
+		$this->query->leftJoin($foreignTable, $foreignTable . '.' . $relation->getOtherKey(), '=', $currentTable . '.' . $relation->getForeignKey());
 		foreach ($columns as $column)
 		{
-			$this->selectFromQuery($name, $column, '_foreign_' . $name . '.' . $column);
+			$this->selectFromQuery($foreignTable, $column, '_foreign_' . $prefix . $name . '.' . $column);
 		};
 	}
 
@@ -64,7 +81,18 @@ class WithJoinEloquentBuilder extends Builder
 	 */
 	protected function isReferencedInQuery($name)
 	{
-		return in_array($name, $this->references);
+		if (in_array($name, $this->references))
+		{
+			return true;
+		}
+		foreach ($this->references as $reference)
+		{
+			if (strpos($reference, $name . '.') === 0)
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -91,7 +119,10 @@ class WithJoinEloquentBuilder extends Builder
 	 */
 	protected function selectFromQuery($table, $column, $as = null)
 	{
-		$string = implode('.', [$table, $column]);
+		$string = implode('.', [
+			$table,
+			$column
+		]);
 		if ( ! is_null($as))
 		{
 			$string .= ' as ' . $as;

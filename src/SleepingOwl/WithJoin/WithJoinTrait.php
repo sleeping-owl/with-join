@@ -1,8 +1,10 @@
 <?php namespace SleepingOwl\WithJoin;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Arr;
 
-trait WithJoinTrait {
+trait WithJoinTrait
+{
 
 	/**
 	 * @param array $attributes
@@ -10,20 +12,16 @@ trait WithJoinTrait {
 	 */
 	public function newFromBuilder($attributes = [])
 	{
+		$attributes = (array) $attributes;
 		$prefix = '_foreign_';
 		$foreignData = [];
 		foreach ($attributes as $key => $value)
 		{
 			if (strpos($key, $prefix) === 0)
 			{
-				unset($attributes->$key);
+				unset($attributes[$key]);
 				$key = substr($key, strlen($prefix));
-				list($table, $key) = explode('.', $key, 2);
-				if ( ! isset($foreignData[$table]))
-				{
-					$foreignData[$table] = [];
-				}
-				$foreignData[$table][$key] = $value;
+				Arr::set($foreignData, $key, $value);
 			}
 		}
 		foreach ($foreignData as $relation => $data)
@@ -31,7 +29,7 @@ trait WithJoinTrait {
 			/** @var BelongsTo $relationInstance */
 			$relationInstance = $this->$relation();
 			$foreign = $relationInstance->getRelated()->newFromBuilder($data);
-			$attributes->$relation = $foreign;
+			$attributes[$relation] = $foreign;
 		}
 		return parent::newFromBuilder($attributes);
 	}
@@ -48,13 +46,25 @@ trait WithJoinTrait {
 	/**
 	 * Being querying a model with eager loading.
 	 *
-	 * @param  array|string  $relations
+	 * @param  array|string $relations
 	 * @return \Illuminate\Database\Eloquent\Builder|WithJoinEloquentBuilder|static
 	 */
 	public static function with($relations)
 	{
 		if (is_string($relations)) $relations = func_get_args();
 		return parent::with($relations);
+	}
+
+	/**
+	 * @param  array|string $relations
+	 * @return \Illuminate\Database\Eloquent\Builder|WithJoinEloquentBuilder|static
+	 */
+	public static function includes($relations)
+	{
+		if (is_string($relations)) $relations = func_get_args();
+		$query = parent::with($relations);
+		$query->references($relations);
+		return $query;
 	}
 
 }
