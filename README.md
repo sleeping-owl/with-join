@@ -94,7 +94,7 @@ select * from `districts` where `districts`.`id` in (?) order by `sort` asc
 
 ### Installation
 
- 1. Require this package in your composer.json and run composer update (or run `composer require sleeping-owl/with-join:1.x` directly):
+1. Require this package in your composer.json and run composer update (or run `composer require sleeping-owl/with-join:1.x` directly):
 
 		"sleeping-owl/with-join": "1.*"
 
