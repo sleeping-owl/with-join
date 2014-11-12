@@ -89,7 +89,7 @@ select `streets`.* from `streets` where `streets`.`id` in (?) order by `title` a
 
 select * from `street_types` where `street_types`.`id` in (?) order by `title` asc
 
-select `streets`.* from `streets` where `streets`.`id` in (?) order by `title` asc
+select * from `districts` where `districts`.`id` in (?) order by `sort` asc
 ```
 
 ### Installation
