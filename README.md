@@ -1,5 +1,9 @@
 ## Package to convert Eloquent BelongsTo subqueries into one query with left join
 
+[![Build Status](https://travis-ci.org/sleeping-owl/with-join.svg?branch=master)](https://travis-ci.org/sleeping-owl/with-join)
+[![Latest Stable Version](https://poser.pugx.org/sleeping-owl/with-join/v/stable.svg)](https://packagist.org/packages/sleeping-owl/with-join)
+[![License](https://poser.pugx.org/sleeping-owl/with-join/license.svg)](https://packagist.org/packages/sleeping-owl/with-join)
+
 ### Usage
 
 Mark relation you want to convert into left join using `->references($relations)` method or `Model::includes($relations)` method:
@@ -28,7 +32,7 @@ will perform the following sql-query:
 
 ```sql
 select 
-	`street`.`<…>` as `__f__street.<…>`, 
+	`street`.`<…>` as `__f__street---<…>`, 
 	`street_images`.* 
 from 
 	`street_images` 
@@ -100,9 +104,9 @@ will perform a following sql-query (*<…> will be replaced with all table colum
 
 ```sql
 select 
-	`street`.`<…>` as `__f__street.<…>`,
-	 `type`.`<…>` as `__f__street.__f__type.<…>`,
-	 `district`.`<…>` as `__f__street.__f__district.<…>`,
+	`street`.`<…>` as `__f__street---<…>`,
+	 `type`.`<…>` as `__f__street---__f__type---<…>`,
+	 `district`.`<…>` as `__f__street---__f__district---<…>`,
 	 `street_images`.* 
 from 
 	`street_images` 
