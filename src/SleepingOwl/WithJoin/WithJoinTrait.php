@@ -13,7 +13,7 @@ trait WithJoinTrait
 	public function newFromBuilder($attributes = [])
 	{
 		$attributes = (array) $attributes;
-		$prefix = '_foreign_';
+		$prefix = WithJoinEloquentBuilder::$prefix;
 		$foreignData = [];
 		foreach ($attributes as $key => $value)
 		{

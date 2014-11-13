@@ -3,9 +3,16 @@
 use Cache;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 class WithJoinEloquentBuilder extends Builder
 {
+
+	/**
+	 * @var string
+	 */
+	public static $prefix = '__f__';
+
 	/**
 	 * @var array
 	 */
@@ -46,8 +53,9 @@ class WithJoinEloquentBuilder extends Builder
 
 	/**
 	 * @param $name
+	 * @param Relation $relation
 	 */
-	protected function addNestedRelations($name, BelongsTo $relation)
+	protected function addNestedRelations($name, Relation $relation)
 	{
 		$nestedRelations = $this->nestedRelations($name);
 		if (count($nestedRelations) <= 0) return;
@@ -56,23 +64,41 @@ class WithJoinEloquentBuilder extends Builder
 		foreach ($nestedRelations as $nestedName => $nestedConstraints)
 		{
 			$relation = $class->$nestedName();
-			$this->addJoinToQuery($nestedName, $class->getTable(), $relation, $name . '._foreign_');
+			$this->addJoinToQuery($nestedName, $name, $relation, $name . '.' . static::$prefix);
 		}
 	}
 
 	/**
-	 * @param $name
-	 * @param BelongsTo $relation
+	 * @param $joinTableAlias
+	 * @param $currentTableAlias
+	 * @param BelongsTo|Relation $relation
+	 * @param string $columnsPrefix
 	 */
-	protected function addJoinToQuery($name, $currentTable, BelongsTo $relation, $prefix = '')
+	protected function addJoinToQuery($joinTableAlias, $currentTableAlias, Relation $relation, $columnsPrefix = '')
 	{
-		$foreignTable = $relation->getRelated()->getTable();
-		$columns = $this->getColumns($foreignTable);
-		$this->query->leftJoin($foreignTable, $foreignTable . '.' . $relation->getOtherKey(), '=', $currentTable . '.' . $relation->getForeignKey());
+		$joinTableName = $relation->getRelated()->getTable();
+
+		$joinTable = implode(' as ', [
+			$joinTableName,
+			$joinTableAlias
+		]);
+		$joinLeftCondition = implode('.', [
+			$joinTableAlias,
+			$relation->getOtherKey()
+		]);
+		$joinRightCondition = implode('.', [
+			$currentTableAlias,
+			$relation->getForeignKey()
+		]);
+
+		$this->query->leftJoin($joinTable, $joinLeftCondition, '=', $joinRightCondition);
+
+		$columns = $this->getColumns($joinTableName);
+		$prefix = static::$prefix . $columnsPrefix . $joinTableAlias . '.';
 		foreach ($columns as $column)
 		{
-			$this->selectFromQuery($foreignTable, $column, '_foreign_' . $prefix . $name . '.' . $column);
-		};
+			$this->selectFromQuery($joinTableAlias, $column, $prefix . $column);
+		}
 	}
 
 	/**

@@ -9,11 +9,46 @@ Model::with('other')->references('other')->orderBy('other.title', 'asc')->get();
  # this will make one sql-query with left join of 'other' relation
  # result object will be the same object
  
-Model::includes('other', 'another')->where('other.title', '=', 'my title')->get();
- # will be the same as Model::with('other', 'another')->references('other', 'another')->…
+Model::includes('first', 'second')->where('first.title', '=', 'my title')->get();
+ # will be the same as Model::with('first', 'second')->references('first', 'second')->…
 
-Model::with('other')->orderBy('field', 'asc')->get();
+Model::with('foreign')->orderBy('field', 'asc')->get();
  # this will work with default behaviour (perform 2 sql-queries)
+```
+
+### Example
+
+#### New Behaviour
+
+```php
+StreetImage::includes('street')->first()
+```
+
+will perform the following sql-query:
+
+```sql
+select 
+	`street`.`<…>` as `__f__street.<…>`, 
+	`street_images`.* 
+from 
+	`street_images` 
+left join 
+	`streets` as `street` on `street`.`id` = `street_images`.`street_id` 
+order by `sort` asc 
+limit 1
+```
+
+#### Default Behaviour
+
+```php
+StreetImage::with('street')->first()
+```
+
+will perform the following sql-queries:
+
+```sql
+select `street_images`.* from `street_images` order by `sort` asc limit 1
+select `streets`.* from `streets` where `streets`.`id` in (?) order by `title` asc
 ```
 
 ### Object Structure
@@ -64,20 +99,20 @@ StreetImage::includes('street.type', 'street.district')->first();
 will perform a following sql-query (*<…> will be replaced with all table columns*):
 
 ```sql
-select
-	`streets`.`<…>` as `_foreign_street.<…>`, 
-	`street_types`.`<…>` as `_foreign_street._foreign_type.<…>`, 
-	`districts`.`<…>` as `_foreign_street._foreign_district.<…>`, 
-	`street_images`.* 
+select 
+	`street`.`<…>` as `__f__street.<…>`,
+	 `type`.`<…>` as `__f__street.__f__type.<…>`,
+	 `district`.`<…>` as `__f__street.__f__district.<…>`,
+	 `street_images`.* 
 from 
 	`street_images` 
 left join 
-	`streets` on `streets`.`id` = `street_images`.`street_id` 
+	`streets` as `street` on `street`.`id` = `street_images`.`street_id` 
 left join 
-	`street_types` on `street_types`.`id` = `streets`.`street_type_id` 
+	`street_types` as `type` on `type`.`id` = `street`.`street_type_id` 
 left join 
-	`districts` on `districts`.`id` = `streets`.`district_id` 
-order by `sort` asc
+	`districts` as `district` on `district`.`id` = `street`.`district_id` 
+order by `sort` asc 
 limit 1
 ```
 instead of performing 4 sql-queries by default Eloquent behaviour:

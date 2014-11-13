@@ -1,6 +1,16 @@
 CHANGELOG
 =========
 
+2014-11-13, v1.0.1
+------------------
+
+* Foreign table joins by relation name alias:
+	```
+		Model::include('street')->where('street.id', '=', $id);
+		Model::include('street.type')->orderBy('type.id', 'asc');
+	```
+
+
 2014-11-12, v1.0.0
 ------------------
 
