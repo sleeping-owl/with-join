@@ -1,0 +1,1 @@
+a:3:{s:13:"_columns_foos";a:4:{i:0;s:2:"id";i:1;s:5:"title";i:2;s:10:"created_at";i:3;s:10:"updated_at";}s:13:"_columns_bazs";a:4:{i:0;s:2:"id";i:1;s:5:"title";i:2;s:10:"created_at";i:3;s:10:"updated_at";}s:13:"_columns_bars";a:6:{i:0;s:2:"id";i:1;s:5:"title";i:2;s:6:"foo_id";i:3;s:10:"created_at";i:4;s:10:"updated_at";i:5;s:6:"baz_id";}}

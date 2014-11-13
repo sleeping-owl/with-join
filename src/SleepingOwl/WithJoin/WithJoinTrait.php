@@ -24,14 +24,15 @@ trait WithJoinTrait
 				Arr::set($foreignData, $key, $value);
 			}
 		}
+		$instance = parent::newFromBuilder($attributes);
 		foreach ($foreignData as $relation => $data)
 		{
 			/** @var BelongsTo $relationInstance */
 			$relationInstance = $this->$relation();
 			$foreign = $relationInstance->getRelated()->newFromBuilder($data);
-			$attributes[$relation] = $foreign;
+			$instance->setRelation($relation, $foreign);
 		}
-		return parent::newFromBuilder($attributes);
+		return $instance;
 	}
 
 	/**
