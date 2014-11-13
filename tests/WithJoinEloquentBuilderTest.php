@@ -75,7 +75,7 @@ class WithJoinTest extends TestCase
 		$this->assertEquals('First Foo First Baz Bar', $bar->title);
 		$this->assertEquals('First Foo', $bar->foo->title);
 
-		$this->assertQuery('select "foo"."id" as "__f__foo.id", "foo"."title" as "__f__foo.title", "foo"."created_at" as "__f__foo.created_at", "foo"."updated_at" as "__f__foo.updated_at", "bars".* from "bars" left join "foos" as "foo" on "foo"."id" = "bars"."foo_id" where "bars"."id" = ? limit 1');
+		$this->assertQuery('select "foo"."id" as "__f__foo---id", "foo"."title" as "__f__foo---title", "foo"."created_at" as "__f__foo---created_at", "foo"."updated_at" as "__f__foo---updated_at", "bars".* from "bars" left join "foos" as "foo" on "foo"."id" = "bars"."foo_id" where "bars"."id" = ? limit 1');
 
 		$this->assertQueryCount(1);
 	}
@@ -87,7 +87,7 @@ class WithJoinTest extends TestCase
 		$this->assertEquals('First Foo First Baz Bar', $bar->title);
 		$this->assertEquals('First Foo', $bar->foo->title);
 
-		$this->assertQuery('select "foo"."id" as "__f__foo.id", "foo"."title" as "__f__foo.title", "foo"."created_at" as "__f__foo.created_at", "foo"."updated_at" as "__f__foo.updated_at", "bars".* from "bars" left join "foos" as "foo" on "foo"."id" = "bars"."foo_id" where "bars"."id" = ? limit 1');
+		$this->assertQuery('select "foo"."id" as "__f__foo---id", "foo"."title" as "__f__foo---title", "foo"."created_at" as "__f__foo---created_at", "foo"."updated_at" as "__f__foo---updated_at", "bars".* from "bars" left join "foos" as "foo" on "foo"."id" = "bars"."foo_id" where "bars"."id" = ? limit 1');
 
 		$this->assertQueryCount(1);
 	}
@@ -99,7 +99,7 @@ class WithJoinTest extends TestCase
 		$this->assertEquals('First Foo First Baz Bar', $bar->title);
 		$this->assertEquals('First Foo', $bar->foo->title);
 
-		$this->assertQuery('select "foo"."id" as "__f__foo.id", "foo"."title" as "__f__foo.title", "foo"."created_at" as "__f__foo.created_at", "foo"."updated_at" as "__f__foo.updated_at", "bars".* from "bars" left join "foos" as "foo" on "foo"."id" = "bars"."foo_id" where "foo"."id" = ? limit 1');
+		$this->assertQuery('select "foo"."id" as "__f__foo---id", "foo"."title" as "__f__foo---title", "foo"."created_at" as "__f__foo---created_at", "foo"."updated_at" as "__f__foo---updated_at", "bars".* from "bars" left join "foos" as "foo" on "foo"."id" = "bars"."foo_id" where "foo"."id" = ? limit 1');
 
 		$this->assertQueryCount(1);
 	}
@@ -112,7 +112,7 @@ class WithJoinTest extends TestCase
 		$this->assertEquals('First Foo', $bar->foo->title);
 		$this->assertEquals('Second Baz', $bar->baz->title);
 
-		$this->assertQuery('select "foo"."id" as "__f__foo.id", "foo"."title" as "__f__foo.title", "foo"."created_at" as "__f__foo.created_at", "foo"."updated_at" as "__f__foo.updated_at", "baz"."id" as "__f__baz.id", "baz"."title" as "__f__baz.title", "baz"."created_at" as "__f__baz.created_at", "baz"."updated_at" as "__f__baz.updated_at", "bars".* from "bars" left join "foos" as "foo" on "foo"."id" = "bars"."foo_id" left join "bazs" as "baz" on "baz"."id" = "bars"."baz_id" where "foo"."id" = ? and "baz"."id" = ? limit 1');
+		$this->assertQuery('select "foo"."id" as "__f__foo---id", "foo"."title" as "__f__foo---title", "foo"."created_at" as "__f__foo---created_at", "foo"."updated_at" as "__f__foo---updated_at", "baz"."id" as "__f__baz---id", "baz"."title" as "__f__baz---title", "baz"."created_at" as "__f__baz---created_at", "baz"."updated_at" as "__f__baz---updated_at", "bars".* from "bars" left join "foos" as "foo" on "foo"."id" = "bars"."foo_id" left join "bazs" as "baz" on "baz"."id" = "bars"."baz_id" where "foo"."id" = ? and "baz"."id" = ? limit 1');
 
 		$this->assertQueryCount(1);
 	}
@@ -125,7 +125,7 @@ class WithJoinTest extends TestCase
 		$this->assertEquals('First Foo', $bar->foo->title);
 		$this->assertEquals('Second Baz', $bar->baz->title);
 
-		$this->assertQuery('select "baz"."id" as "__f__baz.id", "baz"."title" as "__f__baz.title", "baz"."created_at" as "__f__baz.created_at", "baz"."updated_at" as "__f__baz.updated_at", "bars".* from "bars" left join "bazs" as "baz" on "baz"."id" = "bars"."baz_id" where "baz"."id" = ? limit 1');
+		$this->assertQuery('select "baz"."id" as "__f__baz---id", "baz"."title" as "__f__baz---title", "baz"."created_at" as "__f__baz---created_at", "baz"."updated_at" as "__f__baz---updated_at", "bars".* from "bars" left join "bazs" as "baz" on "baz"."id" = "bars"."baz_id" where "baz"."id" = ? limit 1');
 		$this->assertQuery('select * from "foos" where "foos"."id" in (?)');
 
 		$this->assertQueryCount(2);
@@ -139,7 +139,7 @@ class WithJoinTest extends TestCase
 		$this->assertEquals('First Foo First Baz Bar', $bom->bar->title);
 		$this->assertEquals('First Foo', $bom->bar->foo->title);
 
-		$this->assertQuery('select "bar"."id" as "__f__bar.id", "bar"."title" as "__f__bar.title", "bar"."foo_id" as "__f__bar.foo_id", "bar"."created_at" as "__f__bar.created_at", "bar"."updated_at" as "__f__bar.updated_at", "bar"."baz_id" as "__f__bar.baz_id", "foo"."id" as "__f__bar.__f__foo.id", "foo"."title" as "__f__bar.__f__foo.title", "foo"."created_at" as "__f__bar.__f__foo.created_at", "foo"."updated_at" as "__f__bar.__f__foo.updated_at", "boms".* from "boms" left join "bars" as "bar" on "bar"."id" = "boms"."bar_id" left join "foos" as "foo" on "foo"."id" = "bar"."foo_id" where "foo"."id" = ? limit 1');
+		$this->assertQuery('select "bar"."id" as "__f__bar---id", "bar"."title" as "__f__bar---title", "bar"."foo_id" as "__f__bar---foo_id", "bar"."created_at" as "__f__bar---created_at", "bar"."updated_at" as "__f__bar---updated_at", "bar"."baz_id" as "__f__bar---baz_id", "foo"."id" as "__f__bar---__f__foo---id", "foo"."title" as "__f__bar---__f__foo---title", "foo"."created_at" as "__f__bar---__f__foo---created_at", "foo"."updated_at" as "__f__bar---__f__foo---updated_at", "boms".* from "boms" left join "bars" as "bar" on "bar"."id" = "boms"."bar_id" left join "foos" as "foo" on "foo"."id" = "bar"."foo_id" where "foo"."id" = ? limit 1');
 
 		$this->assertQueryCount(1);
 	}

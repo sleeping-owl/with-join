@@ -21,6 +21,7 @@ trait WithJoinTrait
 			{
 				unset($attributes[$key]);
 				$key = substr($key, strlen($prefix));
+				$key = str_replace('---', '.', $key);
 				Arr::set($foreignData, $key, $value);
 			}
 		}

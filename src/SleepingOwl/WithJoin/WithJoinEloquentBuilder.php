@@ -64,7 +64,7 @@ class WithJoinEloquentBuilder extends Builder
 		foreach ($nestedRelations as $nestedName => $nestedConstraints)
 		{
 			$relation = $class->$nestedName();
-			$this->addJoinToQuery($nestedName, $name, $relation, $name . '.' . static::$prefix);
+			$this->addJoinToQuery($nestedName, $name, $relation, $name . '---' . static::$prefix);
 		}
 	}
 
@@ -94,7 +94,7 @@ class WithJoinEloquentBuilder extends Builder
 		$this->query->leftJoin($joinTable, $joinLeftCondition, '=', $joinRightCondition);
 
 		$columns = $this->getColumns($joinTableName);
-		$prefix = static::$prefix . $columnsPrefix . $joinTableAlias . '.';
+		$prefix = static::$prefix . $columnsPrefix . $joinTableAlias . '---';
 		foreach ($columns as $column)
 		{
 			$this->selectFromQuery($joinTableAlias, $column, $prefix . $column);
