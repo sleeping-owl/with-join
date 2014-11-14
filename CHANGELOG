@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+2014-11-14, v1.0.4
+------------------
+
+* isRelationSupported method moved to public
+
 2014-11-13, v1.0.3
 ------------------
 
