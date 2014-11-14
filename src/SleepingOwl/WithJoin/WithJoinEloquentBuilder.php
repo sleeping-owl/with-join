@@ -125,7 +125,7 @@ class WithJoinEloquentBuilder extends Builder
 	 * @param $relation
 	 * @return bool
 	 */
-	protected function isRelationSupported($relation)
+	public function isRelationSupported($relation)
 	{
 		return $relation instanceof BelongsTo;
 	}
