@@ -104,7 +104,7 @@ will perform a following sql-query (*<…> will be replaced with all table colum
 
 ```sql
 select 
-	`street`.`<…>` as `__f__street---<…>`,
+	 `street`.`<…>` as `__f__street---<…>`,
 	 `type`.`<…>` as `__f__street---__f__type---<…>`,
 	 `district`.`<…>` as `__f__street---__f__district---<…>`,
 	 `street_images`.* 
