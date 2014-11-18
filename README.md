@@ -149,6 +149,10 @@ select * from `districts` where `districts`.`id` in (?) order by `sort` asc
 	
 3. That`s all.
 
+## Support Library
+
+You can donate in BTC: 13k36pym383rEmsBSLyWfT3TxCQMN2Lekd
+
 ## Copyright and License
 
 Admin was written by Sleeping Owl for the Laravel framework and is released under the MIT License. See the LICENSE file for details.
