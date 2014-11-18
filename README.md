@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/sleeping-owl/with-join.svg?branch=master)](https://travis-ci.org/sleeping-owl/with-join)
 [![Latest Stable Version](https://poser.pugx.org/sleeping-owl/with-join/v/stable.svg)](https://packagist.org/packages/sleeping-owl/with-join)
 [![License](https://poser.pugx.org/sleeping-owl/with-join/license.svg)](https://packagist.org/packages/sleeping-owl/with-join)
+[![Code Climate](https://codeclimate.com/github/sleeping-owl/with-join/badges/gpa.svg)](https://codeclimate.com/github/sleeping-owl/with-join)
 
 ### Usage
 
