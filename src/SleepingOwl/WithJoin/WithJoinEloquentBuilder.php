@@ -194,4 +194,23 @@ class WithJoinEloquentBuilder extends Builder
 		return $columns;
 	}
 
+	/**
+	 * Find a model by its primary key.
+	 *
+	 * @param  mixed  $id
+	 * @param  array  $columns
+	 * @return \Illuminate\Database\Eloquent\Model|static|null
+	 */
+	public function find($id, $columns = array('*'))
+	{
+		if (is_array($id))
+		{
+			return $this->findMany($id, $columns);
+		}
+
+		$this->query->where($this->model->getQualifiedKeyName(), '=', $id);
+
+		return $this->first($columns);
+	}
+
 }
