@@ -1,7 +1,6 @@
 <?php namespace SleepingOwl\WithJoin;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Arr;
 
 trait WithJoinTrait
 {
