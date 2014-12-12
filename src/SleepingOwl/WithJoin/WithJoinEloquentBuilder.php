@@ -213,4 +213,19 @@ class WithJoinEloquentBuilder extends Builder
 		return $this->first($columns);
 	}
 
+	/**
+	* @param array $relations
+	* @return \Illuminate\Database\Query\Builder
+	*/
+	public function with($relations)
+    {
+        parent::with($relations);
+
+        if ($relations) {
+            $this->references($relations);
+        }
+
+        return $this;
+    }
+
 }
