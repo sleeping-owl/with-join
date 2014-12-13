@@ -68,4 +68,9 @@ trait WithJoinTrait
 		return $query;
 	}
 
+    public function getIncludes()
+    {
+        return property_exists($this, 'includes') ? $this->includes : null;
+    }
+
 }

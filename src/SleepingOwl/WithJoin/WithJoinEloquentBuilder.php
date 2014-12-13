@@ -219,12 +219,14 @@ class WithJoinEloquentBuilder extends Builder
 	*/
 	public function with($relations)
     {
-        parent::with($relations);
-
-        if ($relations) {
+		$includes = $this->getModel()->getIncludes();
+        if (is_array($includes)) {
+            $relations = array_unique(array_merge($relations, $includes));
             $this->references($relations);
         }
 
+        parent::with($relations);
+        
         return $this;
     }
 
