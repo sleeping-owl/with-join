@@ -52,6 +52,13 @@ class Bom extends \Illuminate\Database\Eloquent\Model
 
 }
 
+class Qux extends Bom
+{
+	use \SleepingOwl\WithJoin\WithJoinTrait;
+	protected $table = 'boms';
+	protected $includes = ['bar'];
+}
+
 class WithJoinTest extends TestCase
 {
 
@@ -150,6 +157,19 @@ class WithJoinTest extends TestCase
 		$bom = Bom::includes('bar')->where('bar.id', '=', 1)->first();
 		$this->assertArrayNotHasKey('bar', $bom->attributesToArray());
 		$this->assertInstanceOf('Bar', $bom->getRelation('bar'));
+	}
+
+	/** @test */
+	public function it_uses_includes_to_set_references()
+	{
+		$qux = Qux::where('bar.id', '=', 1)->first();
+
+		$this->assertEquals('First Bar Bom', $qux->title);
+		$this->assertEquals('First Foo First Baz Bar', $qux->bar->title);
+
+		$this->assertQuery('select "bar"."id" as "__f__bar---id", "bar"."title" as "__f__bar---title", "bar"."foo_id" as "__f__bar---foo_id", "bar"."created_at" as "__f__bar---created_at", "bar"."updated_at" as "__f__bar---updated_at", "bar"."baz_id" as "__f__bar---baz_id", "boms".* from "boms" left join "bars" as "bar" on "bar"."id" = "boms"."bar_id" where "bar"."id" = ? limit 1');
+
+		$this->assertQueryCount(1);
 	}
 
 }

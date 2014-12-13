@@ -213,4 +213,21 @@ class WithJoinEloquentBuilder extends Builder
 		return $this->first($columns);
 	}
 
+	/**
+	* @param array $relations
+	* @return \Illuminate\Database\Query\Builder
+	*/
+	public function with($relations)
+    {
+		$includes = $this->getModel()->getIncludes();
+        if (is_array($includes)) {
+            $relations = array_unique(array_merge($relations, $includes));
+            $this->references($relations);
+        }
+
+        parent::with($relations);
+        
+        return $this;
+    }
+
 }
