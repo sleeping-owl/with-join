@@ -197,11 +197,11 @@ class WithJoinEloquentBuilder extends Builder
 	/**
 	 * Find a model by its primary key.
 	 *
-	 * @param  mixed  $id
-	 * @param  array  $columns
+	 * @param  mixed $id
+	 * @param  array $columns
 	 * @return \Illuminate\Database\Eloquent\Model|static|null
 	 */
-	public function find($id, $columns = array('*'))
+	public function find($id, $columns = ['*'])
 	{
 		if (is_array($id))
 		{
@@ -214,20 +214,21 @@ class WithJoinEloquentBuilder extends Builder
 	}
 
 	/**
-	* @param array $relations
-	* @return \Illuminate\Database\Query\Builder
-	*/
+	 * @param array $relations
+	 * @return \Illuminate\Database\Query\Builder
+	 */
 	public function with($relations)
-    {
+	{
 		$includes = $this->getModel()->getIncludes();
-        if (is_array($includes)) {
-            $relations = array_unique(array_merge($relations, $includes));
-            $this->references($relations);
-        }
+		if (is_array($includes))
+		{
+			$relations = array_unique(array_merge($relations, $includes));
+			$this->references($relations);
+		}
 
-        parent::with($relations);
-        
-        return $this;
-    }
+		parent::with($relations);
+
+		return $this;
+	}
 
 }

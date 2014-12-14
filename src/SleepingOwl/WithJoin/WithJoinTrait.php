@@ -11,7 +11,7 @@ trait WithJoinTrait
 	 */
 	public function newFromBuilder($attributes = [])
 	{
-		$attributes = (array) $attributes;
+		$attributes = (array)$attributes;
 		$prefix = WithJoinEloquentBuilder::$prefix;
 		$foreignData = [];
 		foreach ($attributes as $key => $value)
@@ -68,9 +68,9 @@ trait WithJoinTrait
 		return $query;
 	}
 
-    public function getIncludes()
-    {
-        return property_exists($this, 'includes') ? $this->includes : null;
-    }
+	public function getIncludes()
+	{
+		return property_exists($this, 'includes') ? $this->includes : null;
+	}
 
 }
