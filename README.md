@@ -17,6 +17,14 @@ Model::with('other')->references('other')->orderBy('other.title', 'asc')->get();
 Model::includes('first', 'second')->where('first.title', '=', 'my title')->get();
  # will be the same as Model::with('first', 'second')->references('first', 'second')->…
 
+Model extends Eloquent
+{
+	$includes = ['first', 'second'];
+}
+Model::where('first.title', '=', 'my title')->get();
+# result is same as Model::includes but definition is done within the model
+# if you use $with and $includes together it will be merged
+
 Model::with('foreign')->orderBy('field', 'asc')->get();
  # this will work with default behaviour (perform 2 sql-queries)
 ```
