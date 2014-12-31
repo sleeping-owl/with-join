@@ -222,8 +222,8 @@ class WithJoinEloquentBuilder extends Builder
 		$includes = $this->getModel()->getIncludes();
 		if (is_array($includes))
 		{
-			$relations = array_unique(array_merge($relations, $includes));
-			$this->references($relations);
+			$relations = array_merge($relations, $includes);
+			$this->references(array_keys($this->parseRelations($relations)));
 		}
 
 		parent::with($relations);
