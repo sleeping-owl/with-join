@@ -11,28 +11,56 @@ trait WithJoinTrait
 	 */
 	public function newFromBuilder($attributes = [])
 	{
-		$attributes = (array)$attributes;
-		$prefix = WithJoinEloquentBuilder::$prefix;
-		$foreignData = [];
-		foreach ($attributes as $key => $value)
-		{
-			if (strpos($key, $prefix) === 0)
-			{
-				unset($attributes[$key]);
-				$key = substr($key, strlen($prefix));
-				$key = str_replace('---', '.', $key);
-				Arr::set($foreignData, $key, $value);
-			}
+		$attributes = (array) $attributes;
+
+		$nestedData = [];
+		foreach ($attributes as $key => $value){
+
+			$key = str_replace('---', '.', $key);
+			Arr::set($nestedData, $key, $value);
+
 		}
-		$instance = parent::newFromBuilder($attributes);
-		foreach ($foreignData as $relation => $data)
-		{
-			/** @var BelongsTo $relationInstance */
-			$relationInstance = $this->$relation();
-			$foreign = $relationInstance->getRelated()->newFromBuilder($data);
-			$instance->setRelation($relation, $foreign);
-		}
+
+		$instance = $this->buildForeignEntity(null, $nestedData);
+
 		return $instance;
+	}
+
+	private function buildForeignEntity($entityName = null, $nestedData, $parentInstance = null){
+		$prefix = WithJoinEloquentBuilder::$prefix;
+
+		$children = [];
+		foreach($nestedData as $key => $data){
+
+			if (strpos($key, $prefix) === 0){
+				$newEntityName = str_replace($prefix, '', $key);
+
+				$children[$newEntityName] = $data;
+
+				unset($nestedData[$key]);
+
+			}
+
+		}
+
+		$instance = null;
+		if($entityName == null){
+			$instance = parent::newFromBuilder($nestedData);
+		}else{
+			$relationInstance = $parentInstance->$entityName();
+			$instance = $relationInstance->getRelated()->newFromBuilder($nestedData);
+		}
+
+		foreach($children as $newEntityName => $data){
+
+			$foreign = $this->buildForeignEntity($newEntityName, $data, $instance);
+
+			$instance->setRelation($newEntityName, $foreign);
+
+		}
+
+		return $instance;
+
 	}
 
 	/**
