@@ -219,7 +219,13 @@ class WithJoinEloquentBuilder extends Builder
 	 */
 	public function with($relations)
 	{
-		$includes = $this->getModel()->getIncludes();
+		$includes = null;
+		try
+		{
+			$includes = $this->getModel()->getIncludes();
+		} catch (\BadMethodCallException $e)
+		{
+		}
 		if (is_array($includes))
 		{
 			$relations = array_merge($relations, $includes);
