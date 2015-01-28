@@ -73,18 +73,6 @@ trait WithJoinTrait
 	}
 
 	/**
-	 * Being querying a model with eager loading.
-	 *
-	 * @param  array|string $relations
-	 * @return \Illuminate\Database\Eloquent\Builder|WithJoinEloquentBuilder|static
-	 */
-	public static function with($relations)
-	{
-		if (is_string($relations)) $relations = func_get_args();
-		return parent::with($relations);
-	}
-
-	/**
 	 * @param  array|string $relations
 	 * @return \Illuminate\Database\Eloquent\Builder|WithJoinEloquentBuilder|static
 	 */
