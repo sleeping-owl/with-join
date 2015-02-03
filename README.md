@@ -163,4 +163,4 @@ You can donate in BTC: 13k36pym383rEmsBSLyWfT3TxCQMN2Lekd
 
 ## Copyright and License
 
-Admin was written by Sleeping Owl for the Laravel framework and is released under the MIT License. See the LICENSE file for details.
+Package was written by Sleeping Owl for the Laravel framework and is released under the MIT License. See the LICENSE file for details.
