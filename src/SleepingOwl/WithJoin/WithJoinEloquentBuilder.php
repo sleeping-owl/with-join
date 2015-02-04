@@ -36,6 +36,11 @@ class WithJoinEloquentBuilder extends Builder
 				$this->disableEagerLoad($name);
 				$this->addJoinToQuery($name, $this->model->getTable(), $relation);
 				$this->addNestedRelations($name, $relation);
+
+				$query = $relation->getQuery()->getQuery();
+				$wheres = $query->wheres;
+				$bindings = $query->getBindings();
+				$this->mergeWheres($wheres, $bindings);
 			}
 		}
 		$this->selectFromQuery($this->model->getTable(), '*');
