@@ -107,6 +107,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 		$this->capsule->setAsGlobal();
 
 		$this->capsule->bootEloquent();
+		$this->capsule->getConnection()->enableQueryLog();
 	}
 
 	protected function assertQuery($query)
