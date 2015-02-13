@@ -34,29 +34,31 @@ trait WithJoinTrait
 
 			if (strpos($key, $prefix) === 0){
 				$newEntityName = str_replace($prefix, '', $key);
-
 				$children[$newEntityName] = $data;
-
 				unset($nestedData[$key]);
-
 			}
-
 		}
 
 		$instance = null;
-		if($entityName == null){
+		if ($entityName == null) {
 			$instance = parent::newFromBuilder($nestedData);
-		}else{
+		} else {
 			$relationInstance = $parentInstance->$entityName();
 			$instance = $relationInstance->getRelated()->newFromBuilder($nestedData);
 		}
 
 		foreach($children as $newEntityName => $data){
-
 			$foreign = $this->buildForeignEntity($newEntityName, $data, $instance);
 
-			$instance->setRelation($newEntityName, $foreign);
+			//get primary key of table
+			$primaryKey = $foreign->getKeyForSaveQuery();
 
+			//if the value of the primary key is empty dont create the relation so continue
+			if(empty($primaryKey)) {
+				continue;
+			}
+
+			$instance->setRelation($newEntityName, $foreign);
 		}
 
 		return $instance;
