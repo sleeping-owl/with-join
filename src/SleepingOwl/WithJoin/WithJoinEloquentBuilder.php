@@ -224,6 +224,9 @@ class WithJoinEloquentBuilder extends Builder
 	 */
 	public function with($relations)
 	{
+		//if passing the relations as arguments, pass on to eloquents with
+		if (is_string($relations)) $relations = func_get_args();
+		
 		$includes = null;
 		try
 		{
