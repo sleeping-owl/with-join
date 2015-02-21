@@ -9,30 +9,34 @@ trait WithJoinTrait
 	 * @param array $attributes
 	 * @return static
 	 */
-	public function newFromBuilder($attributes = [])
+	public function newFromBuilder($attributes = [], $connection = null)
 	{
-		$attributes = (array) $attributes;
+		$attributes = (array)$attributes;
 
 		$nestedData = [];
-		foreach ($attributes as $key => $value){
+		foreach ($attributes as $key => $value)
+		{
 
 			$key = str_replace('---', '.', $key);
 			Arr::set($nestedData, $key, $value);
 
 		}
 
-		$instance = $this->buildForeignEntity(null, $nestedData);
+		$instance = $this->buildForeignEntity(null, $nestedData, null, $connection);
 
 		return $instance;
 	}
 
-	private function buildForeignEntity($entityName = null, $nestedData, $parentInstance = null){
+	private function buildForeignEntity($entityName = null, $nestedData, $parentInstance = null, $connection = null)
+	{
 		$prefix = WithJoinEloquentBuilder::$prefix;
 
 		$children = [];
-		foreach($nestedData as $key => $data){
+		foreach ($nestedData as $key => $data)
+		{
 
-			if (strpos($key, $prefix) === 0){
+			if (strpos($key, $prefix) === 0)
+			{
 				$newEntityName = str_replace($prefix, '', $key);
 				$children[$newEntityName] = $data;
 				unset($nestedData[$key]);
@@ -40,21 +44,25 @@ trait WithJoinTrait
 		}
 
 		$instance = null;
-		if ($entityName == null) {
-			$instance = parent::newFromBuilder($nestedData);
-		} else {
+		if ($entityName == null)
+		{
+			$instance = parent::newFromBuilder($nestedData, $connection);
+		} else
+		{
 			$relationInstance = $parentInstance->$entityName();
-			$instance = $relationInstance->getRelated()->newFromBuilder($nestedData);
+			$instance = $relationInstance->getRelated()->newFromBuilder($nestedData, $connection);
 		}
 
-		foreach($children as $newEntityName => $data){
+		foreach ($children as $newEntityName => $data)
+		{
 			$foreign = $this->buildForeignEntity($newEntityName, $data, $instance);
 
 			//get primary key of table
 			$primaryKey = $foreign->getKeyForSaveQuery();
 
 			//if the value of the primary key is empty dont create the relation so continue
-			if(empty($primaryKey)) {
+			if (empty($primaryKey))
+			{
 				continue;
 			}
 
