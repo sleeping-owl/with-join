@@ -1,7 +1,5 @@
 <?php namespace SleepingOwl\WithJoin;
 
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-
 trait WithJoinTrait
 {
 
@@ -9,7 +7,7 @@ trait WithJoinTrait
 	 * @param array $attributes
 	 * @return static
 	 */
-	public function newFromBuilder($attributes = [])
+	public function newFromBuilder($attributes = [], $connection = null)
 	{
 		$attributes = (array) $attributes;
 
